@@ -4,6 +4,17 @@
 #include <string.h>
 #include <time.h>
 
+void print_size(uint64_t size, char * out)
+{
+    if (size < 1024)
+        sprintf(out, "%lu Bytes", size);
+    else if (size < 1024*1024)
+        sprintf(out, "%lu KiB", (size)/1024);
+    else if (size < 1024*1024*1024)
+        sprintf(out, "%lu MiB", (size)/(1024*1024));
+
+}
+
 static inline void mem_test(uint64_t msize)
 {
     int64_t iterations = 100*1000 + ((16UL*100*1000*1000) / msize);
@@ -46,10 +57,12 @@ static inline void mem_test(uint64_t msize)
 
     if (result1 != result2) puts("problem");
     else {
+        char size_str[32];
         double actual_copying_time = time_copy;
         double mib_copied = ((double)iterations * msize) / (double)(1024*1024);
         double speed = mib_copied / actual_copying_time;
-        printf("Copy size: %lu, %.1lf GiB/s, iter = %lu\n", msize, speed/1024, iterations);
+        print_size(msize, size_str);
+        printf("%13s : %.1lf GiB/s\n", size_str, speed/1024);
 
         // for (int i = 0; i < speed/1024; ++i) printf("*");
         // puts("");
