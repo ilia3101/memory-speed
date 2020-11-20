@@ -3,23 +3,24 @@
 #include <stdint.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 void print_size(uint64_t size, char * out)
 {
     if (size < 1024)
         sprintf(out, "%lu Bytes", size);
     else if (size < 1024*1024)
-        sprintf(out, "%lu KiB", (size)/1024);
+        sprintf(out, "%.2lf KiB", ((double)size)/1024);
     else if (size < 1024*1024*1024)
-        sprintf(out, "%lu MiB", (size)/(1024*1024));
+        sprintf(out, "%.2lf MiB", ((double)size)/(1024*1024));
 
 }
 
 static inline void mem_test(uint64_t msize)
 {
-    int64_t iterations = 100*1000 + ((16UL*100*1000*1000) / msize);
-    iterations -= msize/15;
-    if (iterations < 100) iterations = 100;
+    int64_t iterations = ((1024*1024*1024) / msize) + 10;
+    // iterations -= msize;
+    if (iterations < 10) iterations = 10;
 
     uint8_t * mem1 = malloc(msize);
     uint8_t * mem2 = malloc(msize);
@@ -75,6 +76,6 @@ static inline void mem_test(uint64_t msize)
 
 int main()
 {
-    for (int i = 3; i < 29; ++i)
-        mem_test(2<<i);
+    for (float i = 3; i < 29; i +=1)
+        mem_test(pow(2, i));
 }
