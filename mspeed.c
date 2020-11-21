@@ -9,10 +9,14 @@ void print_size(uint64_t size, char * out)
 {
     if (size < 1024)
         sprintf(out, "%lu Bytes", size);
+    // else if (size < 1024*11)
+    //     sprintf(out, "%.2lf KiB", ((double)size)/1024);
     else if (size < 1024*1024)
-        sprintf(out, "%.2lf KiB", ((double)size)/1024);
+        sprintf(out, "%lu KiB", (uint64_t)(((double)size)/1024+0.5));
+    // else if (size < 1024*1024*10)
+    //     sprintf(out, "%.1lf MiB", ((double)size)/(1024*1024));
     else if (size < 1024*1024*1024)
-        sprintf(out, "%.2lf MiB", ((double)size)/(1024*1024));
+        sprintf(out, "%lu MiB", (uint64_t)(((double)size)/(1024*1024)+0.5));
 
 }
 
@@ -76,6 +80,10 @@ static inline void mem_test(uint64_t msize)
 
 int main()
 {
-    for (float i = 3; i < 29; i +=1)
-        mem_test(pow(2, i));
+    for (float i = 3; i <= 28; i += 1.0)
+    {
+        int memsize = pow(2, i);
+        if (memsize % 2) memsize++;
+        mem_test(memsize);
+    }
 }
