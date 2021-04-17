@@ -24,7 +24,7 @@ static inline void mem_test(uint64_t msize)
 {
     int64_t iterations = (((1024*1024*1024) / msize) + 20)*10+50;
     // iterations -= msize;
-    if (msize == 64) iterations *= 100;
+    // if (msize == 64) iterations *= 5;
     if (iterations < 10) iterations = 10;
 
     uint8_t * mem1 = malloc(msize);
