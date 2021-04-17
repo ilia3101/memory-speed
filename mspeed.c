@@ -22,8 +22,9 @@ void print_size(uint64_t size, char * out)
 
 static inline void mem_test(uint64_t msize)
 {
-    int64_t iterations = ((1024*1024*1024) / msize) + 10;
+    int64_t iterations = (((1024*1024*1024) / msize) + 20)*10+50;
     // iterations -= msize;
+    if (msize == 64) iterations *= 100;
     if (iterations < 10) iterations = 10;
 
     uint8_t * mem1 = malloc(msize);
@@ -31,7 +32,7 @@ static inline void mem_test(uint64_t msize)
 
     memset(mem1, 69, msize);
     memset(mem2, 69, msize);
-    for (volatile int i = 0; i < 1; ++i) {
+    for (volatile int i = 0; i < 3; ++i) {
         memcpy(mem1, mem2, msize);
     }
 
@@ -63,7 +64,7 @@ static inline void mem_test(uint64_t msize)
     if (result1 != result2) puts("problem");
     else {
         char size_str[32];
-        double actual_copying_time = time_copy;
+        double actual_copying_time = time_copy - time_other;
         double mib_copied = ((double)iterations * msize) / (double)(1024*1024);
         double speed = mib_copied / actual_copying_time;
         print_size(msize, size_str);
