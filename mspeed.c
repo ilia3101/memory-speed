@@ -81,7 +81,7 @@ static inline void mem_test(uint64_t msize)
 
 int main()
 {
-    for (float i = 3; i <= 28; i += 1.0)
+    for (float i = 7; i <= 28; i += 1.0)
     {
         int memsize = pow(2, i);
         if (memsize % 2) memsize++;
